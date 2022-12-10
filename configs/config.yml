@@ -1,0 +1,16 @@
+# Here the default values of the config are defined.
+# But it is strongly recomendated to redifine while deploy in production.
+# You may redifine it using os enirenment,
+# for ex.: export SERVER_MODE=release 
+
+server:
+  mode: "debug"  # Available values: "release" ,"debug" 
+  port: "8080"
+
+db:
+  host: localhost
+  port: "5432"
+  name: petproject_db
+  user: db_user
+  password: dbpassword
+  sslmode: disable

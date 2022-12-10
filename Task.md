@@ -37,7 +37,7 @@ age
 ```
 id
 name
-genre
+ganre
 director_id
 rate
 year

@@ -1,0 +1,38 @@
+# docker-compose.yml 
+version: '3.9'
+
+services:
+    db:
+      image: postgres:13
+      environment:
+        POSTGRES_USER: db_user
+        POSTGRES_PASSWORD: dbpassword
+        POSTGRES_DB: petproject_db
+        PGDATA: /data/postgres
+        TZ: "Europe/Kiev"
+        PGTZ: "Europe/Kiev"
+      ports:
+        - "5432:5432"
+      restart: unless-stopped
+      healthcheck:
+        test: pg_isready -U db_user -d petproject_db
+        interval: 2s
+        timeout: 2s
+        retries: 5
+
+    migrate:
+      image: migrate/migrate
+      depends_on:
+        db:
+          condition: service_healthy
+      volumes:
+        - ./migrations:/migrations
+      command:
+        [
+          "-path",
+          "/migrations",
+          "-database",
+          "postgres://db_user:dbpassword@db:5432/petproject_db?sslmode=disable",
+          "up"
+        ]
+
