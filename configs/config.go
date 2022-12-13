@@ -22,8 +22,8 @@ type PostgresConfig struct {
 }
 
 type Config struct {
-	ServerConfig   ServerConfig
-	PostgresConfig PostgresConfig
+	Server ServerConfig
+	DB     PostgresConfig
 }
 
 func InitConfig() (Config, error) {
@@ -38,17 +38,17 @@ func InitConfig() (Config, error) {
 	}
 
 	cfg := Config{
-		ServerConfig: ServerConfig{
+		Server: ServerConfig{
 			Mode: viper.GetString("server.mode"),
 			Port: viper.GetString("server.port"),
 		},
-		PostgresConfig: PostgresConfig{
-			Host: viper.GetString("db.host"),
-			Port: viper.GetString("db.port"),
+		DB: PostgresConfig{
+			Host:     viper.GetString("db.host"),
+			Port:     viper.GetString("db.port"),
 			Database: viper.GetString("db.name"),
-			User: viper.GetString("db.user"),
+			User:     viper.GetString("db.user"),
 			Password: viper.GetString("db.password"),
-			SSLmode: viper.GetString("db.sslmode"),
+			SSLmode:  viper.GetString("db.sslmode"),
 		},
 	}
 

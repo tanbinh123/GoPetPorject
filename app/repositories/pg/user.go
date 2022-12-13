@@ -1,5 +1,7 @@
 package pg
 
+import "github.com/jmoiron/sqlx"
+
 type Repository struct {
 	Authorization
 }
@@ -7,6 +9,6 @@ type Repository struct {
 type Authorization interface {
 }
 
-func NewRepository() *Repository {
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{}
 }

@@ -11,6 +11,6 @@ db:
   host: localhost
   port: "5432"
   name: petproject_db
-  user: db_user
-  password: dbpassword
+  user: "db_user"
+  password: somepassword
   sslmode: disable
