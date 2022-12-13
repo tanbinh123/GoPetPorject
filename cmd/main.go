@@ -29,18 +29,22 @@ func SetupAndRun() error {
 	if err != nil {
 		return fmt.Errorf("cannot read config: %w", err)
 	}
-	fmt.Printf("%+v", cfg)
 
-	repo := pg.NewRepository()
+	db, err := pg.NewPostgresDB(cfg)
+	if err != nil {
+		return fmt.Errorf("error while creating connection to database: %w", err)
+	}
+
+	repo := pg.NewRepository(db)
 
 	usecase := usecases.NewUsecase(repo)
 
 	handlers := handlers.NewHandler(usecase)
 
-	routes := handlers.InitRouter(cfg.ServerConfig.Mode)
+	routes := handlers.InitRouter(cfg.Server.Mode)
 
 	server := new(Server)
-	if err := server.Run(cfg.ServerConfig.Port, routes); err != nil {
+	if err := server.Run(cfg.Server.Port, routes); err != nil {
 		return fmt.Errorf("cannot run server: %w", err)
 	}
 
