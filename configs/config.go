@@ -22,9 +22,17 @@ type PostgresConfig struct {
 }
 
 type Config struct {
-	Server ServerConfig
-	DB     PostgresConfig
+	LogLevel string
+	Server   ServerConfig
+	DB       PostgresConfig
 }
+
+// Allowed logger levels & config key.
+const (
+	DebugLogLvl = "DEBUG"
+	InfoLogLvl  = "INFO"
+	ErrorLogLvl = "ERROR"
+)
 
 func InitConfig() (Config, error) {
 	viper.AddConfigPath("configs")
@@ -35,6 +43,10 @@ func InitConfig() (Config, error) {
 
 	if err := viper.ReadInConfig(); err != nil {
 		return Config{}, fmt.Errorf("error while reading config: %s", err.Error())
+	}
+	
+	if err:= validate(viper.GetString("loglevel")); err != nil {
+		return Config{}, fmt.Errorf("error while cheking allowed loging leveles: %w", err)
 	}
 
 	cfg := Config{
@@ -53,4 +65,14 @@ func InitConfig() (Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func validate(logLevel string) error {
+	if strings.ToUpper(logLevel) != DebugLogLvl &&
+		strings.ToUpper(logLevel) != ErrorLogLvl &&
+		strings.ToUpper(logLevel) != InfoLogLvl {
+		return fmt.Errorf("\"%v\" is not allowed logger level", logLevel)
+	}
+
+	return nil
 }

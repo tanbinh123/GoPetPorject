@@ -10,6 +10,7 @@ import (
 	"github.com/Brigant/GoPetPorject/app/repositories/pg"
 	"github.com/Brigant/GoPetPorject/app/usecases"
 	"github.com/Brigant/GoPetPorject/configs"
+	"github.com/Brigant/GoPetPorject/logger"
 )
 
 type Server struct {
@@ -30,21 +31,31 @@ func SetupAndRun() error {
 		return fmt.Errorf("cannot read config: %w", err)
 	}
 
+	logger, err := logger.New(cfg.LogLevel)
+	if err != nil {
+		return fmt.Errorf("cannot create logger: %w", err)
+	}
+
 	db, err := pg.NewPostgresDB(cfg)
 	if err != nil {
+		logger.Errorf("%+v", err)
+
 		return fmt.Errorf("error while creating connection to database: %w", err)
 	}
 
 	repo := pg.NewRepository(db)
 
+	logger.Infof("Connection to database successfully created")
+
 	usecase := usecases.NewUsecase(repo)
 
-	handlers := handlers.NewHandler(usecase)
+	handlers := handlers.NewHandler(usecase, logger)
 
 	routes := handlers.InitRouter(cfg.Server.Mode)
 
 	server := new(Server)
 	if err := server.Run(cfg.Server.Port, routes); err != nil {
+		logger.Errorf("%+v", err)
 		return fmt.Errorf("cannot run server: %w", err)
 	}
 
