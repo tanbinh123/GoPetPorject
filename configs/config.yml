@@ -3,6 +3,8 @@
 # You may redifine it using os enirenment,
 # for ex.: export SERVER_MODE=release 
 
+loglevel: INFO
+
 server:
   mode: "debug"  # Available values: "release" ,"debug" 
   port: "8080"
