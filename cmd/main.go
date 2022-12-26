@@ -36,6 +36,8 @@ func SetupAndRun() error {
 		return fmt.Errorf("cannot create logger: %w", err)
 	}
 
+	defer logger.Flush()
+
 	db, err := pg.NewPostgresDB(cfg)
 	if err != nil {
 		logger.Errorf("%+v", err)
@@ -47,15 +49,16 @@ func SetupAndRun() error {
 
 	logger.Infof("Connection to database successfully created")
 
-	usecase := usecases.NewUsecase(repo)
+	
 
-	handlers := handlers.NewHandler(usecase, logger)
+	handlers := handlers.NewHandler(usecases.NewUser(repo), logger)
 
 	routes := handlers.InitRouter(cfg.Server.Mode)
 
 	server := new(Server)
 	if err := server.Run(cfg.Server.Port, routes); err != nil {
 		logger.Errorf("%+v", err)
+
 		return fmt.Errorf("cannot run server: %w", err)
 	}
 

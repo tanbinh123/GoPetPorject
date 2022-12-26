@@ -1,10 +1,14 @@
 package enteties
 
+import "errors"
+
 type User struct {
 	ID       string `json:"id"`
-	Login    int    `json:"login"`
-	Password string `json:"password"`
-	Age      int    `json:"age"`
+	Phone    int    `json:"phone" binding:"required"`
+	Password string `json:"password" binding:"required"`
+	Age      int    `json:"age" binding:"required"`
 	Created  string `json:"created"`
 	Modified string `json:"modified"`
 }
+
+var ErrDuplicatePhone = errors.New("phone is already exists in the database")
