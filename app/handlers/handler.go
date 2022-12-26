@@ -1,20 +1,19 @@
 package handlers
 
 import (
-	"github.com/Brigant/GoPetPorject/app/usecases"
 	"github.com/Brigant/GoPetPorject/logger"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	usecase *usecases.Usecase
-	logger *logger.Logger
+	userUsecase UserUsecase
+	logger      *logger.Logger
 }
 
-func NewHandler(usecase *usecases.Usecase, logger *logger.Logger) *Handler {
-	return &Handler{
-		usecase: usecase,
-		logger: logger,
+func NewHandler(usecase UserUsecase, logger *logger.Logger) Handler {
+	return Handler{
+		userUsecase: usecase,
+		logger:      logger,
 	}
 }
 

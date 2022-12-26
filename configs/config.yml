@@ -3,7 +3,7 @@
 # You may redifine it using os enirenment,
 # for ex.: export SERVER_MODE=release 
 
-loglevel: INFO
+loglevel: DEBUG
 
 server:
   mode: "debug"  # Available values: "release" ,"debug" 

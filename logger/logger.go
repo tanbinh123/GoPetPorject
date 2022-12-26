@@ -28,8 +28,8 @@ func New(logLevel string) (*Logger, error) {
 			EncodeLevel:  zapcore.CapitalLevelEncoder,
 			TimeKey:      "time",
 			EncodeTime:   zapcore.ISO8601TimeEncoder,
-			CallerKey:    "caller",
-			EncodeCaller: zapcore.ShortCallerEncoder,
+			// CallerKey:    "caller",
+			// EncodeCaller: zapcore.ShortCallerEncoder,
 		},
 	}
 

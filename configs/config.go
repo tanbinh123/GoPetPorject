@@ -44,12 +44,14 @@ func InitConfig() (Config, error) {
 	if err := viper.ReadInConfig(); err != nil {
 		return Config{}, fmt.Errorf("error while reading config: %s", err.Error())
 	}
-	
-	if err:= validate(viper.GetString("loglevel")); err != nil {
+
+	loglevel := viper.GetString("loglevel")
+	if err := validate(loglevel); err != nil {
 		return Config{}, fmt.Errorf("error while cheking allowed loging leveles: %w", err)
 	}
 
 	cfg := Config{
+		LogLevel: loglevel,
 		Server: ServerConfig{
 			Mode: viper.GetString("server.mode"),
 			Port: viper.GetString("server.port"),

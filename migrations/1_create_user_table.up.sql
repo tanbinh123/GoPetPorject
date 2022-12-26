@@ -1,11 +1,27 @@
 CREATE TABLE "user" (
     "id" UUid DEFAULT gen_random_uuid() NOT NULL,
-    "first_name" VARCHAR(255) NOT NULL,
-    "last_name" VARCHAR(255),
-    "email" VARCHAR(320) NOT NULL,
+    "phone" VARCHAR(25) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
-    "created_at" Timestamp Without Time Zone NOT NULL DEFAULT NOW(),
+    "age" INT NOT NULL,
+    "created" Timestamp With Time Zone NOT NULL DEFAULT NOW(),
+    "modified" Timestamp With Time Zone NOT NULL DEFAULT NOW(),
     PRIMARY KEY ("id"),
     CONSTRAINT "unique_user_id" UNIQUE("id"),
-    CONSTRAINT "unique_user_email" UNIQUE("email")
+    CONSTRAINT "unique_user_phone" UNIQUE("phone")
 );
+
+CREATE FUNCTION update_modified_column()   
+RETURNS TRIGGER AS $$
+BEGIN
+    IF row(NEW.*) IS DISTINCT FROM row(OLD.*) THEN
+      NEW.modified = now(); 
+      RETURN NEW;
+   ELSE
+      RETURN OLD;
+   END IF;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_user_modtime 
+BEFORE UPDATE ON "user" 
+FOR EACH ROW EXECUTE PROCEDURE  update_modified_column();
