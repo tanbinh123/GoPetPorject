@@ -11,4 +11,8 @@ type User struct {
 	Modified string `json:"modified"`
 }
 
-var ErrDuplicatePhone = errors.New("phone is already exists in the database")
+var (
+	ErrDuplicatePhone = errors.New("phone is already exists in the database")
+	ErrUserNotFound = errors.New("user is not found with such credentials")
+)
+

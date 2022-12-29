@@ -1,6 +1,6 @@
 CREATE TABLE "user" (
     "id" UUid DEFAULT gen_random_uuid() NOT NULL,
-    "phone" VARCHAR(25) NOT NULL,
+    "phone" BIGINT NOT NULL,
     "password" VARCHAR(255) NOT NULL,
     "age" INT NOT NULL,
     "created" Timestamp With Time Zone NOT NULL DEFAULT NOW(),
