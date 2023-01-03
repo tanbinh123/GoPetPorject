@@ -12,7 +12,7 @@ import (
 func (h *Handler) signUp(c *gin.Context) {
 	var user enteties.User
 
-	if err := c.BindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&user); err != nil {
 		h.logger.Infof("wrong body: %v", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -66,7 +66,7 @@ func (h *Handler) signIn(c *gin.Context) {
 	if err != nil {
 		if errors.Is(err, enteties.ErrUserNotFound) {
 			h.logger.Debugw("GenerateToken", "error", err.Error())
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 
 			return
 		}
