@@ -78,9 +78,14 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func (h *Handler) logout(c *gin.Context) {
+	id, _ := c.Get(userCtx)
+	
 
+	c.JSON(http.StatusOK, gin.H{
+		"userId": id,
+	})
 }
