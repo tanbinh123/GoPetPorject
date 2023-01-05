@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"time"
 
@@ -11,7 +12,7 @@ import (
 
 const (
 	signingKey = "sdFWlnxb13t&r"
-	tokenTTL   = 12 * time.Hour
+	tokenTTL   = 1 * time.Hour
 )
 
 type User struct {
@@ -45,7 +46,7 @@ func (u User) sha256(someString string) string {
 
 type tokenClaims struct {
 	jwt.StandardClaims
-	id string
+	Id string
 }
 
 // The function GenerateToken represents bissness logic layer
@@ -70,4 +71,25 @@ func (u User) GenerateToken(phone int, password string) (string, error) {
 	}
 
 	return tk, nil
+}
+
+func (u User) ParseToken(accesToken string) (string, error) {
+	token, err := jwt.ParseWithClaims(accesToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid signing metod")
+		}
+
+		return []byte(signingKey), nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
+		return "", errors.New("token claims are not of type *tokenClaims")
+	}
+
+	return claims.Id, nil
 }

@@ -23,11 +23,13 @@ func (h *Handler) InitRouter(mode string) *gin.Engine {
 	}
 	router := gin.New()
 
+	router.Use(gin.Recovery())
+
 	user := router.Group("/user")
 	{
 		user.POST("/sign-up", h.signUp)
 		user.POST("/sign-in", h.signIn)
-		user.GET("/logout", h.logout)
+		user.GET("/logout", h.userIdentity, h.logout)
 	}
 
 	return router
