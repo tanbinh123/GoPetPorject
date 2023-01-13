@@ -49,9 +49,7 @@ func SetupAndRun() error {
 
 	logger.Infof("Connection to database successfully created")
 
-	
-
-	handlers := handlers.NewHandler(usecases.NewUser(repo), logger)
+	handlers := handlers.NewHandler(usecases.NewAuth(repo), logger)
 
 	routes := handlers.InitRouter(cfg.Server.Mode)
 

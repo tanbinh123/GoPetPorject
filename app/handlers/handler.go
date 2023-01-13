@@ -6,13 +6,13 @@ import (
 )
 
 type Handler struct {
-	userUsecase UserUsecase
+	authUsecase AuthUsecase
 	logger      *logger.Logger
 }
 
-func NewHandler(usecase UserUsecase, logger *logger.Logger) Handler {
+func NewHandler(usecase AuthUsecase, logger *logger.Logger) Handler {
 	return Handler{
-		userUsecase: usecase,
+		authUsecase: usecase,
 		logger:      logger,
 	}
 }
@@ -25,11 +25,12 @@ func (h *Handler) InitRouter(mode string) *gin.Engine {
 
 	router.Use(gin.Recovery())
 
-	user := router.Group("/user")
+	auth := router.Group("/auth")
 	{
-		user.POST("/sign-up", h.signUp)
-		user.POST("/sign-in", h.signIn)
-		user.GET("/logout", h.userIdentity, h.logout)
+		auth.POST("/sign-up", h.signUp)
+		auth.POST("/sign-in", h.signIn)
+		auth.POST("/refresh", h.refreshTokens)
+		auth.GET("/logout", h.userIdentity, h.logout)
 	}
 
 	return router

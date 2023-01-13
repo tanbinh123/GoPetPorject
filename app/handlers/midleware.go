@@ -39,7 +39,7 @@ func (h Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
-	userID, err := h.userUsecase.ParseToken(headerParts[1])
+	userID, err := h.authUsecase.ParseToken(headerParts[1])
 	if err != nil {
 		h.logger.Debugw("userIdentify", "error", err.Error())
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
@@ -50,4 +50,6 @@ func (h Handler) userIdentity(c *gin.Context) {
 	}
 
 	c.Set(userCtx, userID)
+
+	c.Next()
 }
